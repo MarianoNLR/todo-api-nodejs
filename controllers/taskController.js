@@ -5,15 +5,14 @@ export async function getMyTasks (req, res) {
     
     const { userId } = req
 
-    const taskList = await Task.find({_id: userId})
+    const taskList = await Task.find({user: userId})
 
-    req.status(200).json({ taskList })
+    res.status(200).json({ taskList })
 }
 
 export async function addTask (req, res) {
     const { userId } = req
     const { title, description, deadline, priority } = req.body
-
     const newTask = new Task({
         user: userId,
         title,
