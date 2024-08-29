@@ -16,7 +16,10 @@ const taskSchema = new Schema({
     },
     priority: {
         type: String
-    }
+    },
+    subtasks: [{
+      type: String
+    }]
 })
 
 taskSchema.set('toJSON', {
