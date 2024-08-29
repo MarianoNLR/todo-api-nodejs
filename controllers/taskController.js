@@ -15,7 +15,7 @@ export async function addTask (req, res) {
     const { title, description, deadline, priority } = req.body
 
     const newTask = new Task({
-        user: '66cf877ecdc3cc2a39783418',
+        user: userId,
         title,
         description,
         deadline,
@@ -35,7 +35,7 @@ export async function update (req, res) {
 
     const update = new Task({
         _id: taskId,
-        user: '66cf877ecdc3cc2a39783418',
+        user: userId,
         title,
         description,
         deadline,
