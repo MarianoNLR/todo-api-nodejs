@@ -1,5 +1,5 @@
 import jwt, { decode } from 'jsonwebtoken'
-
+import 'dotenv/config'
 
 const { JWT_SECRET } = process.env
 
