@@ -10,6 +10,14 @@ export async function getMyTasks (req, res) {
     res.status(200).json({ taskList })
 }
 
+export async function getTaskById (req, res) {
+    const { userId } = req
+    const { taskId } = req.params
+    const task = await Task.findById(taskId)
+
+    res.status(200).json({task})
+}
+
 export async function addTask (req, res) {
     const { userId } = req
     const { title, description, deadline, priority } = req.body
@@ -18,7 +26,8 @@ export async function addTask (req, res) {
         title,
         description,
         deadline,
-        priority
+        priority,
+        status: false
     })
     
     await newTask.save()
