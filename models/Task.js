@@ -18,8 +18,12 @@ const taskSchema = new Schema({
         type: String
     },
     subtasks: [{
-      type: String
-    }]
+      description: String,
+      status: Boolean
+    }],
+    status: {
+        type: Boolean
+    }
 })
 
 taskSchema.set('toJSON', {
