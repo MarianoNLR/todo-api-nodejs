@@ -27,7 +27,8 @@ export async function addTask (req, res) {
         description,
         deadline,
         priority,
-        status: false
+        status: false,
+        subtasks: []
     })
     
     await newTask.save()
@@ -53,4 +54,14 @@ export async function update (req, res) {
     const updated = await Task.findByIdAndUpdate(taskId, update, {new: true})
 
     res.status(200).json({updated})
+}
+
+export async function newSubtask (req, res) {
+    const { userId } = req
+    const { taskId } = req.params
+    const { updateSubtasks } = req.body
+
+    const update = await Task.findByIdAndUpdate(taskId, {subtasks: updateSubtasks}, {new: true})
+
+    res.status(200).json({update})
 }
