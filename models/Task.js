@@ -15,7 +15,7 @@ const taskSchema = new Schema({
         type: Date
     },
     priority: {
-        type: String
+        type: Number
     },
     subtasks: [{
       description: String,
