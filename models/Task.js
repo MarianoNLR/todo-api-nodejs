@@ -15,7 +15,8 @@ const taskSchema = new Schema({
         type: Date
     },
     priority: {
-        type: Number
+        level: Number,
+        name: String
     },
     subtasks: [{
       description: String,
@@ -24,7 +25,7 @@ const taskSchema = new Schema({
     status: {
         type: Boolean
     }
-})
+}, {timestamps: true})
 
 taskSchema.set('toJSON', {
     transform: (document, returnedObject) => {
