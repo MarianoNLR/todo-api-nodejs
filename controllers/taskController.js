@@ -25,9 +25,20 @@ export async function getMyTasks (req, res) {
 export async function getTaskById (req, res) {
     const { userId } = req
     const { taskId } = req.params
-    const task = await Task.findById(taskId)
-
-    res.status(200).json({task})
+    try {
+        const task = await Task.findById(taskId)
+        
+        if (!task)
+            res.status(404).json({error: 'Task not found.'})
+        
+        if (task.user.toString() === userId)
+            res.status(200).json({task})
+        else 
+            res.status(401).json({error: 'Unauthorized'})
+    } catch (error) {
+        res.status(500).json({error: 'An unexpected error has ocurred. Try again.'})
+    }
+    
 }
 
 export async function addTask (req, res) {
