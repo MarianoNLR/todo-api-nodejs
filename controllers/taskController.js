@@ -29,14 +29,14 @@ export async function getTaskById (req, res) {
         const task = await Task.findById(taskId)
         
         if (!task)
-            res.status(404).json({error: 'Task not found.'})
+            return res.status(404).json({error: 'Task not found.'})
         
         if (task.user.toString() === userId)
-            res.status(200).json({task})
+           return res.status(200).json({task})
         else 
-            res.status(401).json({error: 'Unauthorized'})
+           return res.status(401).json({error: 'Unauthorized'})
     } catch (error) {
-        res.status(500).json({error: 'An unexpected error has ocurred. Try again.'})
+        return res.status(500).json({error: 'An unexpected error has ocurred. Try again.'})
     }
     
 }
@@ -67,22 +67,34 @@ export async function update (req, res) {
     const { taskId } = req.params
     console.log(taskId)
     const { title, description, deadline, priority } = req.body
-
-    const update = new Task({
-        _id: taskId,
-        user: userId,
-        title,
-        description,
-        deadline,
-        priority: {
-            level: +priority,
-            name: PRIORITY[+priority]
+    try {
+        const task = await Task.findById(taskId)
+        
+        if (task.user.toString() !== userId) {
+            return res.status(401).json({error: 'Unauthorized.'})
         }
-    })
 
-    const updated = await Task.findByIdAndUpdate(taskId, update, {new: true})
+        const update = new Task({
+            _id: taskId,
+            user: userId,
+            title,
+            description,
+            deadline,
+            priority: {
+                level: +priority,
+                name: PRIORITY[+priority]
+            }
+        })
+    
+        const updated = await Task.findByIdAndUpdate(taskId, update, {new: true})
+    
+        return res.status(200).json({updated})
 
-    res.status(200).json({updated})
+    } catch (error) {
+        return res.status(500).json({error: 'An unexcpected error has ocurred.'})
+    }
+
+   
 }
 
 export async function newSubtask (req, res) {
