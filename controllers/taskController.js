@@ -101,8 +101,18 @@ export async function newSubtask (req, res) {
     const { userId } = req
     const { taskId } = req.params
     const { updateSubtasks } = req.body
+    try {
+        const task = await Task.findById(taskId)
 
-    const update = await Task.findByIdAndUpdate(taskId, {subtasks: updateSubtasks}, {new: true})
+        if (task.user.toString() !== userId) {
+            return res.status(401).json({error: 'Unauthorized.'})
+        }
+        
+        const update = await Task.findByIdAndUpdate(taskId, {subtasks: updateSubtasks}, {new: true})
+    
+        return res.status(200).json({update})
+    } catch (error) {
+        return res.status(500).json({error: 'An unexpected error has ocurred. Try again'})
+    }
 
-    res.status(200).json({update})
 }
