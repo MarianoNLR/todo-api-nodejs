@@ -37,8 +37,7 @@ export async function getTaskById (req, res) {
            return res.status(401).json({error: 'Unauthorized'})
     } catch (error) {
         return res.status(500).json({error: 'An unexpected error has ocurred. Try again.'})
-    }
-    
+    }  
 }
 
 export async function addTask (req, res) {
@@ -92,9 +91,7 @@ export async function update (req, res) {
 
     } catch (error) {
         return res.status(500).json({error: 'An unexcpected error has ocurred.'})
-    }
-
-   
+    }  
 }
 
 export async function newSubtask (req, res) {
@@ -114,5 +111,23 @@ export async function newSubtask (req, res) {
     } catch (error) {
         return res.status(500).json({error: 'An unexpected error has ocurred. Try again'})
     }
+}
 
+export async function deleteTask (req, res) {
+    const { userId } = req
+    const { taskId } = req.params
+
+    try {
+        const task = await Task.findById(taskId)
+
+        if (!task) return res.status(404).json({error: 'Task not found.'})
+
+        if (task.user.toString() !== userId) return res.status(401).json({error: 'Unauthorized'})
+
+        const result = await Task.findByIdAndDelete(taskId)
+
+        return res.status(200).json({message: 'Task deleted'})
+    } catch (error) {
+        return res.status(500).json({error: 'An unexpected error has ocurred. Try again.'})
+    }
 }
